@@ -6,9 +6,11 @@ namespace EasyInventory.Containers {
     [AddComponentMenu("Easy Inventory/Containers/Standard Container")]
     public class StandardContainer : MonoBehaviour, Container {
 
+        private ArrayList items { get; set; }
+
         // Use this for initialization
         void Start() {
-            Close();
+            items = new ArrayList();
         }
 
         // Update is called once per frame
