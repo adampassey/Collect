@@ -29,16 +29,16 @@ namespace EasyInventory.Slots {
                 //  that was dropped
                 DragHandler currentItem = RemoveItem();
                 DragHandler newItem = DragHandler.draggedItem;
-                Slot otherSlot = newItem.OriginalSlot;
+                Slot otherSlot = newItem.Slot;
 
-                newItem.OriginalSlot.AddItem(currentItem);
+                newItem.Slot.AddItem(currentItem);
                 AddItem(newItem);
 
                 //  this is set on `OnDragEnd` in `DragHandler`
                 //  but we have to set it manually here because
                 //  the `OnEndDrag` will compare against the
                 //  original slot
-                currentItem.OriginalSlot = otherSlot;
+                currentItem.Slot = otherSlot;
             }
         }
 

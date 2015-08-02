@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using EasyInventory.Slots;
+
 namespace EasyInventory.Containers {
 
     public interface Container {
@@ -12,5 +14,9 @@ namespace EasyInventory.Containers {
         void Toggle();
 
         void Add(GameObject item);
+
+        GameObject Remove(Slot slot);
+
+        GameObject Remove(GameObject item);
     }
 }

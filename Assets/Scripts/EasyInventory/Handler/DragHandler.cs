@@ -15,10 +15,13 @@ namespace EasyInventory.Handler {
         public static DragHandler draggedItem;
 
         //  the parent slot
-        private Slot originalSlot;
-        public Slot OriginalSlot {
-            get { return originalSlot; }
-            set { originalSlot = value; }
+        //  TODO: remove this circular reference
+        //  find a way to determine if the item
+        //  was moved without parent transform
+        private Slot slot;
+        public Slot Slot {
+            get { return slot; }
+            set { slot = value; }
         }
 
         private CanvasGroup canvasGroup;
@@ -40,9 +43,9 @@ namespace EasyInventory.Handler {
             }
 
             //  get the current parent slot (if in a slot)
-            originalSlot = transform.parent.gameObject.GetComponent<Slot>();
-            if (originalSlot != null) {
-                originalSlot.item = this;
+            slot = transform.parent.gameObject.GetComponent<Slot>();
+            if (slot != null) {
+                slot.item = this;
             }
         }
 
@@ -55,7 +58,7 @@ namespace EasyInventory.Handler {
         public void OnBeginDrag(PointerEventData eventData) {
             draggedItem = this;
             canvasGroup.blocksRaycasts = false;
-            originalSlot.RemoveItem();
+            slot.RemoveItem();
         }
 
         /**
@@ -82,13 +85,13 @@ namespace EasyInventory.Handler {
             //  IF the item has been dropped in an invalid
             //  location, this is called- triggering the
             //  ItemDidDrop event 
-            if (currentSlot == originalSlot) {
-                transform.position = originalSlot.transform.position;
-                originalSlot.item = this;
+            if (currentSlot == slot) {
+                transform.position = slot.transform.position;
+                slot.item = this;
 
-                ItemDropEventManager.TriggerItemDidDrop(gameObject, originalSlot, eventData);
+                ItemDropEventManager.TriggerItemDidDrop(gameObject, slot, eventData);
             } else {
-                originalSlot = currentSlot;
+                slot = currentSlot;
             }
             canvasGroup.blocksRaycasts = true;
         }
