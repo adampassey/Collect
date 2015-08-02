@@ -22,12 +22,34 @@ namespace EasyInventory.Slots {
          **/
         public void OnDrop(PointerEventData eventData) {
             if (item == null) {
-                item = DragHandler.draggedItem;
-                item.transform.SetParent(transform);
-                item.Slot = this;
+                AddItem(DragHandler.draggedItem);
             } else {
                 throw new UnityException("Error: Easy Inventory does not support item swapping. Yet.");
             }
+        }
+
+        /**
+         *  Remove the `DragHandler` from this slot.
+         *  Will return null if no item is present.
+         *
+         **/
+        public DragHandler RemoveItem() {
+            if (item == null) {
+                return null;
+            }
+
+            DragHandler oldItem = item;
+            item = null;
+            return oldItem;
+        }
+
+        /**
+         *  Add the `DragHandler` to this slot.
+         *
+         **/
+         public void AddItem(DragHandler item) {
+            this.item = item;
+            item.transform.SetParent(transform);
         }
     }
 }

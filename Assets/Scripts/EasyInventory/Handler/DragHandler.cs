@@ -15,10 +15,10 @@ namespace EasyInventory.Handler {
         public static DragHandler draggedItem;
 
         //  the parent slot
-        private Slot slot;
-        public Slot Slot {
-            get { return slot; }
-            set { slot = value; }
+        private Slot originalSlot;
+        public Slot OriginalSlot {
+            get { return originalSlot; }
+            set { originalSlot = value; }
         }
 
         private CanvasGroup canvasGroup;
@@ -40,9 +40,9 @@ namespace EasyInventory.Handler {
             }
 
             //  get the current parent slot (if in a slot)
-            slot = transform.parent.gameObject.GetComponent<Slot>();
-            if (slot != null) {
-                slot.item = this;
+            originalSlot = transform.parent.gameObject.GetComponent<Slot>();
+            if (originalSlot != null) {
+                originalSlot.item = this;
             }
         }
 
@@ -55,7 +55,7 @@ namespace EasyInventory.Handler {
         public void OnBeginDrag(PointerEventData eventData) {
             draggedItem = this;
             canvasGroup.blocksRaycasts = false;
-            slot.item = null;
+            originalSlot.RemoveItem();
         }
 
         /**
@@ -77,16 +77,18 @@ namespace EasyInventory.Handler {
          **/
         public void OnEndDrag(PointerEventData eventData) {
             draggedItem = null;
+            Slot currentSlot = transform.parent.gameObject.GetComponent<Slot>();
 
-            //  if it's still in the slot, put it back
-            //  where it should be
-            if (transform.parent == slot.transform) {
+            //  IF the item has been dropped in an invalid
+            //  location, this is called- triggering the
+            //  ItemDidDrop event 
+            if (currentSlot == originalSlot) {
+                transform.position = originalSlot.transform.position;
+                originalSlot.item = this;
 
-                //  TODO: This is currently getting called every time
-                ItemDropEventManager.TriggerItemDidDrop(gameObject, eventData);
-
-                transform.position = slot.transform.position;
-                slot.item = this;
+                ItemDropEventManager.TriggerItemDidDrop(gameObject, originalSlot, eventData);
+            } else {
+                originalSlot = currentSlot;
             }
             canvasGroup.blocksRaycasts = true;
         }

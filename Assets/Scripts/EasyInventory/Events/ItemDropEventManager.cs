@@ -3,17 +3,18 @@ using System.Collections;
 
 using UnityEngine.EventSystems;
 using EasyInventory.Handler;
+using EasyInventory.Slots;
 
 namespace EasyInventory.Events {
 
     public class ItemDropEventManager {
 
-        public delegate void ItemDidDrop(GameObject item, PointerEventData data);
+        public delegate void ItemDidDrop(GameObject item, Slot slot, PointerEventData data);
         public static event ItemDidDrop OnItemDidDrop;
 
-        public static void TriggerItemDidDrop(GameObject item, PointerEventData data) {
+        public static void TriggerItemDidDrop(GameObject item, Slot slot, PointerEventData data) {
             if (OnItemDidDrop != null) {
-                OnItemDidDrop(item, data);
+                OnItemDidDrop(item, slot, data);
             }
         }
     }
