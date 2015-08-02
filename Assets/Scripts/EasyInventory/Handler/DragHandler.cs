@@ -4,6 +4,7 @@ using UnityEngine.EventSystems;
 using System;
 
 using EasyInventory.Slots;
+using EasyInventory.Events;
 
 namespace EasyInventory.Handler {
 
@@ -80,6 +81,10 @@ namespace EasyInventory.Handler {
             //  if it's still in the slot, put it back
             //  where it should be
             if (transform.parent == slot.transform) {
+
+                //  TODO: This is currently getting called every time
+                ItemDropEventManager.TriggerItemDidDrop(gameObject, eventData);
+
                 transform.position = slot.transform.position;
                 slot.item = this;
             }
