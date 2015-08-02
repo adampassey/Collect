@@ -24,7 +24,21 @@ namespace EasyInventory.Slots {
             if (item == null) {
                 AddItem(DragHandler.draggedItem);
             } else {
-                throw new UnityException("Error: Easy Inventory does not support item swapping. Yet.");
+
+                //  swap the item with the item
+                //  that was dropped
+                DragHandler currentItem = RemoveItem();
+                DragHandler newItem = DragHandler.draggedItem;
+                Slot otherSlot = newItem.OriginalSlot;
+
+                newItem.OriginalSlot.AddItem(currentItem);
+                AddItem(newItem);
+
+                //  this is set on `OnDragEnd` in `DragHandler`
+                //  but we have to set it manually here because
+                //  the `OnEndDrag` will compare against the
+                //  original slot
+                currentItem.OriginalSlot = otherSlot;
             }
         }
 
