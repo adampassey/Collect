@@ -6,25 +6,25 @@ using System;
 using EasyInventory.Slots;
 using EasyInventory.Events;
 
-namespace EasyInventory.Handler {
+namespace EasyInventory.Handlers {
 
     [AddComponentMenu("Easy Inventory/Handler/Drag Handler")]
-    public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
+    public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
         [Tooltip("The item currently being dragged")]
-        public static DragHandler draggedItem;
+        public static Draggable DraggedItem;
 
-        //  the parent slot
-        //  TODO: remove this circular reference
-        //  find a way to determine if the item
-        //  was moved without parent transform
-        private Slot slot;
-        public Slot Slot {
-            get { return slot; }
-            set { slot = value; }
+        //  stores the old slot when the
+        //  item is dragged so we can reset it
+        //  if the drag is unsuccessful
+        private Slot oldSlot;
+        public Slot OldSlot {
+            get { return oldSlot; }
+            set { oldSlot = value; }
         }
 
         private CanvasGroup canvasGroup;
+        private Canvas canvas;
 
         /**
          *  Will create a CanvasGroup component on this
@@ -41,12 +41,6 @@ namespace EasyInventory.Handler {
             if (canvasGroup == null) {
                 canvasGroup = gameObject.AddComponent<CanvasGroup>();
             }
-
-            //  get the current parent slot (if in a slot)
-            slot = transform.parent.gameObject.GetComponent<Slot>();
-            if (slot != null) {
-                slot.item = this;
-            }
         }
 
         /**
@@ -56,9 +50,19 @@ namespace EasyInventory.Handler {
          *
          **/
         public void OnBeginDrag(PointerEventData eventData) {
-            draggedItem = this;
+            DraggedItem = this;
             canvasGroup.blocksRaycasts = false;
-            slot.RemoveItem();
+
+            oldSlot = GetComponentInParent<Slot>();
+            oldSlot.RemoveItem();
+
+            if (canvas == null) {
+                canvas = getParentCanvas();
+            }
+
+            //  place it in the parent canvas so
+            //  it renders above everything else
+            transform.SetParent(canvas.transform);
         }
 
         /**
@@ -79,21 +83,29 @@ namespace EasyInventory.Handler {
          *  
          **/
         public void OnEndDrag(PointerEventData eventData) {
-            draggedItem = null;
-            Slot currentSlot = transform.parent.gameObject.GetComponent<Slot>();
+            DraggedItem = null;
 
-            //  IF the item has been dropped in an invalid
-            //  location, this is called- triggering the
-            //  ItemDidDrop event 
-            if (currentSlot == slot) {
-                transform.position = slot.transform.position;
-                slot.item = this;
+            //  if this item is still in the canvas transform
+            //  that means the drop was unsuccessful- trigger
+            //  the ItemDidDrop event
+            if (transform.parent == canvas.transform) {
 
-                ItemDropEventManager.TriggerItemDidDrop(gameObject, slot, eventData);
-            } else {
-                slot = currentSlot;
+                transform.position = oldSlot.transform.position;
+                transform.SetParent(oldSlot.transform);
+                oldSlot.item = this;
+
+                ItemDropEventManager.TriggerItemDidDrop(gameObject, oldSlot, eventData);
             }
+
+            oldSlot = null;
             canvasGroup.blocksRaycasts = true;
+        }
+
+        /**
+         *  Get the parent Canvas of this object
+         **/
+        private Canvas getParentCanvas() {
+            return GetComponentInParent<Canvas>();
         }
     }
 }

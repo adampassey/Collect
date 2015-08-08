@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using EasyInventory.Slots;
-using EasyInventory.Handler;
+using EasyInventory.Handlers;
 using System;
 
 namespace EasyInventory.Containers {
@@ -50,7 +50,7 @@ namespace EasyInventory.Containers {
          *
          **/
         public void Add(GameObject item) {
-            DragHandler dragHandler = item.GetComponent<DragHandler>();
+            Draggable dragHandler = item.GetComponent<Draggable>();
             if (dragHandler == null) {
                 throw new MissingComponentException("Adding to Container requires DragHandler component");
             }
@@ -58,12 +58,6 @@ namespace EasyInventory.Containers {
             foreach(Slot slot in Slots) {
                 if (slot.item == null) {
                     slot.AddItem(dragHandler);
-
-                    //  this sucks- circular reference
-                    //  is already causing issues
-                    //  TODO: remove this once `DragHandler`
-                    //  has been fixed
-                    dragHandler.Slot = slot;
                 }
             }
         }
@@ -92,7 +86,7 @@ namespace EasyInventory.Containers {
          *
          **/
         public GameObject Remove(GameObject item) {
-            DragHandler dragHandler = item.GetComponent<DragHandler>();
+            Draggable dragHandler = item.GetComponent<Draggable>();
             if (dragHandler == null) {
                 throw new MissingComponentException("Removing from Container requires DragHandler component");
             }

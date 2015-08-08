@@ -5,14 +5,18 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-using EasyInventory.Handler;
+using EasyInventory.Handlers;
 
 namespace EasyInventory.Slots {
 
     [AddComponentMenu("Easy Inventory/Slots/Slot")]
     public class Slot : MonoBehaviour, IDropHandler {
 
-        public DragHandler item;
+        public Draggable item;
+
+        public void Start() {
+            item = GetComponentInChildren<Draggable>();
+        }
 
         /**
          *  This event is fired when an item is dropped
@@ -22,23 +26,16 @@ namespace EasyInventory.Slots {
          **/
         public void OnDrop(PointerEventData eventData) {
             if (item == null) {
-                AddItem(DragHandler.draggedItem);
+                AddItem(Draggable.DraggedItem);
             } else {
 
                 //  swap the item with the item
                 //  that was dropped
-                DragHandler currentItem = RemoveItem();
-                DragHandler newItem = DragHandler.draggedItem;
-                Slot otherSlot = newItem.Slot;
+                Draggable otherItem = Draggable.DraggedItem;
+                Slot otherSlot = otherItem.OldSlot;
 
-                newItem.Slot.AddItem(currentItem);
-                AddItem(newItem);
-
-                //  this is set on `OnDragEnd` in `DragHandler`
-                //  but we have to set it manually here because
-                //  the `OnEndDrag` will compare against the
-                //  original slot
-                currentItem.Slot = otherSlot;
+                otherSlot.AddItem(RemoveItem());
+                AddItem(otherItem);
             }
         }
 
@@ -47,12 +44,12 @@ namespace EasyInventory.Slots {
          *  Will return null if no item is present.
          *
          **/
-        public DragHandler RemoveItem() {
+        public Draggable RemoveItem() {
             if (item == null) {
                 return null;
             }
 
-            DragHandler oldItem = item;
+            Draggable oldItem = item;
             item = null;
             return oldItem;
         }
@@ -61,7 +58,7 @@ namespace EasyInventory.Slots {
          *  Add the `DragHandler` to this slot.
          *
          **/
-         public void AddItem(DragHandler item) {
+         public void AddItem(Draggable item) {
             this.item = item;
             item.transform.SetParent(transform);
         }

@@ -17,12 +17,12 @@ namespace EasyInventory.Controllers {
         // Use this for initialization
         void Start() {
             if (Container == null) {
-                throw new UnityException("No container assigned to this controller.");
+                throw new MissingReferenceException("No container assigned to this controller.");
             }
 
             container = Container.GetComponent<Container>();
             if (container == null) {
-                throw new UnityException("No container component attached to this Container object.");
+                throw new MissingComponentException("No container component attached to this Container object.");
             }
         }
 

@@ -2,7 +2,7 @@
 using System.Collections;
 
 using UnityEngine.EventSystems;
-using EasyInventory.Handler;
+using EasyInventory.Handlers;
 using EasyInventory.Slots;
 
 namespace EasyInventory.Events {
