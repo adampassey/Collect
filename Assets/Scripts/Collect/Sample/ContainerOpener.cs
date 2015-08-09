@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using EasyInventory.Containers;
+using Collect.Containers;
 
 public class ContainerOpener : MonoBehaviour {
 

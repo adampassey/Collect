@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using EasyInventory.Slots;
-using EasyInventory.Handlers;
+using Collect.Slots;
+using Collect.Handlers;
 using System;
 
-namespace EasyInventory.Containers {
+namespace Collect.Containers {
 
     [AddComponentMenu("Easy Inventory/Containers/Standard Container")]
     public class StandardContainer : MonoBehaviour, Container {

@@ -5,9 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-using EasyInventory.Handlers;
+using Collect.Handlers;
 
-namespace EasyInventory.Slots {
+namespace Collect.Slots {
 
     [AddComponentMenu("Easy Inventory/Slots/Slot")]
     public class Slot : MonoBehaviour, IDropHandler {

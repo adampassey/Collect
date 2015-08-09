@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace EasyInventory.Utils {
+namespace Collect.Utils {
 
     public class CanvasHelper {
 

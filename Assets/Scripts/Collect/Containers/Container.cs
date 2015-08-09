@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-using EasyInventory.Slots;
+using Collect.Slots;
 
-namespace EasyInventory.Containers {
+namespace Collect.Containers {
 
     public interface Container {
 

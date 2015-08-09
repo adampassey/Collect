@@ -3,10 +3,10 @@ using System.Collections;
 using UnityEngine.EventSystems;
 using System;
 
-using EasyInventory.Slots;
-using EasyInventory.Events;
+using Collect.Slots;
+using Collect.Events;
 
-namespace EasyInventory.Handlers {
+namespace Collect.Handlers {
 
     [AddComponentMenu("Easy Inventory/Handler/Drag Handler")]
     public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {

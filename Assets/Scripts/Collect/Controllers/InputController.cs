@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-using EasyInventory.Static.Inputs;
-using EasyInventory.Containers;
+using Collect.Static.Inputs;
+using Collect.Containers;
 
-namespace EasyInventory.Controllers {
+namespace Collect.Controllers {
 
     [AddComponentMenu("Easy Inventory/Controllers/Input Controller")]
     public class InputController : MonoBehaviour {

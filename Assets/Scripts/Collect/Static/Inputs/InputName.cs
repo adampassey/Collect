@@ -1,5 +1,5 @@
 ﻿
-namespace EasyInventory.Static.Inputs {
+namespace Collect.Static.Inputs {
 
 
     public static class InputName {

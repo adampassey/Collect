@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using EasyInventory.Utils;
+using Collect.Utils;
 
-namespace EasyInventory.Containers {
+namespace Collect.Containers {
 
     [AddComponentMenu("Easy Inventory/Containers/Container Parent")]
     public class ContainerParent : MonoBehaviour {

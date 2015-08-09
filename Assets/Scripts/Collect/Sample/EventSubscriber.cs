@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-using EasyInventory.Events;
-using EasyInventory.Slots;
+using Collect.Events;
+using Collect.Slots;
 using UnityEngine.EventSystems;
 
 public class EventSubscriber : MonoBehaviour {

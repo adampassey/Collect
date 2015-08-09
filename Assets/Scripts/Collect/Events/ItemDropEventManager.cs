@@ -2,10 +2,10 @@
 using System.Collections;
 
 using UnityEngine.EventSystems;
-using EasyInventory.Handlers;
-using EasyInventory.Slots;
+using Collect.Handlers;
+using Collect.Slots;
 
-namespace EasyInventory.Events {
+namespace Collect.Events {
 
     public class ItemDropEventManager {
 
