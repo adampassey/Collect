@@ -16,7 +16,7 @@ public class EventSubscriber : MonoBehaviour {
 
     public void ItemDidDrop(GameObject item, Slot slot, PointerEventData data) {
         Debug.Log(item.name);
-        Debug.Log(slot.item.name);
+        Debug.Log(slot.Item.name);
         Debug.Log(slot.name);
         Debug.Log(data.position);
     }

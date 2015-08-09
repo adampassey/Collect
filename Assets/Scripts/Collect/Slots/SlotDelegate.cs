@@ -3,6 +3,9 @@ using System.Collections;
 
 namespace Collect.Slots {
 
+    public delegate void ItemAddedToSlot(GameObject item);
+    public delegate void ItemRemovedFromSlot(GameObject item);
+
     /**
      *  Extend this interface to receive events
      *  from slots. When an item is removed
@@ -13,9 +16,9 @@ namespace Collect.Slots {
      **/
     public interface SlotDelegate {
 
-        void ItemWasAdded(GameObject item);
+        event ItemAddedToSlot ItemWasAddedToSlot;
 
-        void ItemWasRemoved(GameObject item);
+        event ItemRemovedFromSlot ItemWasRemovedFromSlot;
         
     }
 }

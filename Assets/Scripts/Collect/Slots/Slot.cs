@@ -12,18 +12,17 @@ namespace Collect.Slots {
     [AddComponentMenu("Collect/Slots/Slot")]
     public class Slot : MonoBehaviour, IDropHandler {
 
-        public Draggable item;
+        //  the item in this slot
+        public Draggable Item;
 
         //  delegate called when an item is added to this slot
-        public delegate void ItemAdded(GameObject item);
-        public ItemAdded itemAddedDelegate;
+        public ItemAddedToSlot ItemAddedDelegate;
 
         //  delegate called when an item is removed from this slot
-        public delegate void ItemRemoved(GameObject item);
-        public ItemRemoved itemRemovedDelegate;
+        public ItemRemovedFromSlot ItemRemovedDelegate;
 
         public void Start() {
-            item = GetComponentInChildren<Draggable>();
+            Item = GetComponentInChildren<Draggable>();
         }
 
         /**
@@ -33,7 +32,7 @@ namespace Collect.Slots {
          *
          **/
         public void OnDrop(PointerEventData eventData) {
-            if (item == null) {
+            if (Item == null) {
                 AddItem(Draggable.DraggedItem);
             } else {
 
@@ -53,15 +52,15 @@ namespace Collect.Slots {
          *
          **/
         public Draggable RemoveItem() {
-            if (item == null) {
+            if (Item == null) {
                 return null;
             }
 
-            Draggable oldItem = item;
-            item = null;
+            Draggable oldItem = Item;
+            Item = null;
 
-            if (itemRemovedDelegate != null) {
-                itemRemovedDelegate(oldItem.gameObject);
+            if (ItemRemovedDelegate != null) {
+                ItemRemovedDelegate(oldItem.gameObject);
             }
 
             return oldItem;
@@ -72,11 +71,11 @@ namespace Collect.Slots {
          *
          **/
          public void AddItem(Draggable item) {
-            this.item = item;
+            this.Item = item;
             item.transform.SetParent(transform);
 
-            if (itemAddedDelegate != null) {
-                itemAddedDelegate(item.gameObject);
+            if (ItemAddedDelegate != null) {
+                ItemAddedDelegate(item.gameObject);
             }
         }
     }

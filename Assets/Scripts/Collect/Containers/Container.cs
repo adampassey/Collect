@@ -5,6 +5,9 @@ using Collect.Slots;
 
 namespace Collect.Containers {
 
+    public delegate void ItemAdded(GameObject item);
+    public delegate void ItemRemoved(GameObject item);
+
     public interface Container {
 
         void Open();
@@ -18,6 +21,10 @@ namespace Collect.Containers {
         GameObject Remove(Slot slot);
 
         GameObject Remove(GameObject item);
+
+        event ItemAdded ItemWasAdded;
+
+        event ItemRemoved ItemWasRemoved;
 
     }
 }

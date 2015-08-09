@@ -9,7 +9,18 @@ namespace Collect.Containers {
     [AddComponentMenu("Collect/Containers/Standard Container")]
     public class StandardContainer : MonoBehaviour, Container, SlotDelegate {
 
+        //  the event broadcast when an item is added to this container
+        public event ItemAdded ItemWasAdded;
+
+        //  the event broadcast when an item is removed from this container
+        public event ItemRemoved ItemWasRemoved;
+
+        //  subscribing to slot events
+        public event ItemAddedToSlot ItemWasAddedToSlot;
+        public event ItemRemovedFromSlot ItemWasRemovedFromSlot;
+
         private ArrayList slots;
+
         public ArrayList Slots {
             get { return slots; }
         }
@@ -56,7 +67,7 @@ namespace Collect.Containers {
             }
 
             foreach(Slot slot in Slots) {
-                if (slot.item == null) {
+                if (slot.Item == null) {
                     slot.AddItem(dragHandler);
                 }
             }
@@ -69,7 +80,7 @@ namespace Collect.Containers {
          *
          **/
         public GameObject Remove(Slot slot) {
-            if (slot.item == null) {
+            if (slot.Item == null) {
                 return null;
             }
 
@@ -92,8 +103,8 @@ namespace Collect.Containers {
             }
 
             foreach(Slot slot in Slots) {
-                if (slot.item == dragHandler) {
-                    return slot.item.gameObject;
+                if (slot.Item == dragHandler) {
+                    return slot.Item.gameObject;
                 }
             }
 
@@ -103,15 +114,19 @@ namespace Collect.Containers {
         /**
          *  Called when the item is added to this container
          **/
-        public void ItemWasAdded(GameObject item) {
-
+        public void ItemAddedToSlotDelegate(GameObject item) {
+            if (ItemWasAdded != null) {
+                ItemWasAdded(item);
+            }
         }
 
         /**
          *  Called when this item is removed from this container
          **/
-        public void ItemWasRemoved(GameObject item) {
-
+        public void ItemRemovedFromSlotDelegate(GameObject item) {
+            if (ItemWasRemoved != null) {
+                ItemWasRemoved(item);
+            }
         }
 
         /**
@@ -122,8 +137,8 @@ namespace Collect.Containers {
             ArrayList slots = new ArrayList();
             Slot[] childSlots = transform.GetComponentsInChildren<Slot>();
             foreach (Slot slot in childSlots) {
-                slot.itemAddedDelegate = ItemWasAdded;
-                slot.itemRemovedDelegate = ItemWasRemoved;
+                slot.ItemAddedDelegate = ItemAddedToSlotDelegate;
+                slot.ItemRemovedDelegate = ItemRemovedFromSlotDelegate;
                 slots.Add(slot);
             }
             return slots;

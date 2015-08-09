@@ -92,7 +92,7 @@ namespace Collect.Items {
 
                 transform.position = oldSlot.transform.position;
                 transform.SetParent(oldSlot.transform);
-                oldSlot.item = this;
+                oldSlot.Item = this;
 
                 ItemDropEventManager.TriggerItemDidDrop(gameObject, oldSlot, eventData);
             }
