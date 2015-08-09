@@ -9,7 +9,7 @@ using Collect.Handlers;
 
 namespace Collect.Slots {
 
-    [AddComponentMenu("Easy Inventory/Slots/Slot")]
+    [AddComponentMenu("Collect/Slots/Slot")]
     public class Slot : MonoBehaviour, IDropHandler {
 
         public Draggable item;

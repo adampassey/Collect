@@ -8,7 +8,7 @@ using Collect.Events;
 
 namespace Collect.Handlers {
 
-    [AddComponentMenu("Easy Inventory/Handler/Drag Handler")]
+    [AddComponentMenu("Collect/Handler/Drag Handler")]
     public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
         [Tooltip("The item currently being dragged")]

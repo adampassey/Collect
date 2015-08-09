@@ -6,7 +6,7 @@ using Collect.Containers;
 
 namespace Collect.Controllers {
 
-    [AddComponentMenu("Easy Inventory/Controllers/Input Controller")]
+    [AddComponentMenu("Collect/Controllers/Input Controller")]
     public class InputController : MonoBehaviour {
 
         [Tooltip("The Container to to send inputs to")]

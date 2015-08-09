@@ -4,7 +4,7 @@ using Collect.Utils;
 
 namespace Collect.Containers {
 
-    [AddComponentMenu("Easy Inventory/Containers/Container Parent")]
+    [AddComponentMenu("Collect/Containers/Container Parent")]
     public class ContainerParent : MonoBehaviour {
 
         public GameObject ContainerPrefab;

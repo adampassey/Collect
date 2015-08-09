@@ -6,7 +6,7 @@ using System;
 
 namespace Collect.Containers {
 
-    [AddComponentMenu("Easy Inventory/Containers/Standard Container")]
+    [AddComponentMenu("Collect/Containers/Standard Container")]
     public class StandardContainer : MonoBehaviour, Container {
 
         private ArrayList slots;
