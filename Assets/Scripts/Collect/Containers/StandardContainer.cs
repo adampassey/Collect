@@ -7,7 +7,7 @@ using System;
 namespace Collect.Containers {
 
     [AddComponentMenu("Collect/Containers/Standard Container")]
-    public class StandardContainer : MonoBehaviour, Container {
+    public class StandardContainer : MonoBehaviour, Container, SlotDelegate {
 
         private ArrayList slots;
         public ArrayList Slots {
@@ -46,7 +46,7 @@ namespace Collect.Containers {
         /**
          *  Add a GameObject to the the first
          *  open slot. Expects GameObject to have
-         *  a `DragHandler` component attached.
+         *  a `Draggable` component attached.
          *
          **/
         public void Add(GameObject item) {
@@ -81,7 +81,7 @@ namespace Collect.Containers {
          *  iterate through Slots until it finds the
          *  item. Will return null if not found.
          *
-         *  Expects GameObject to have `DragHandler` component
+         *  Expects GameObject to have `Draggable` component
          *  attached.
          *
          **/
@@ -101,6 +101,20 @@ namespace Collect.Containers {
         }
 
         /**
+         *  Called when the item is added to this container
+         **/
+        public void ItemWasAdded(GameObject item) {
+
+        }
+
+        /**
+         *  Called when this item is removed from this container
+         **/
+        public void ItemWasRemoved(GameObject item) {
+
+        }
+
+        /**
          *  Retrieve all the slots that are inside this container.
          *
          **/
@@ -108,6 +122,8 @@ namespace Collect.Containers {
             ArrayList slots = new ArrayList();
             Slot[] childSlots = transform.GetComponentsInChildren<Slot>();
             foreach (Slot slot in childSlots) {
+                slot.itemAddedDelegate = ItemWasAdded;
+                slot.itemRemovedDelegate = ItemWasRemoved;
                 slots.Add(slot);
             }
             return slots;

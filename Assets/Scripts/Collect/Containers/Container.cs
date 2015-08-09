@@ -18,5 +18,6 @@ namespace Collect.Containers {
         GameObject Remove(Slot slot);
 
         GameObject Remove(GameObject item);
+
     }
 }

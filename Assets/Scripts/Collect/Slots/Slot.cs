@@ -14,6 +14,14 @@ namespace Collect.Slots {
 
         public Draggable item;
 
+        //  delegate called when an item is added to this slot
+        public delegate void ItemAdded(GameObject item);
+        public ItemAdded itemAddedDelegate;
+
+        //  delegate called when an item is removed from this slot
+        public delegate void ItemRemoved(GameObject item);
+        public ItemRemoved itemRemovedDelegate;
+
         public void Start() {
             item = GetComponentInChildren<Draggable>();
         }
@@ -51,6 +59,11 @@ namespace Collect.Slots {
 
             Draggable oldItem = item;
             item = null;
+
+            if (itemRemovedDelegate != null) {
+                itemRemovedDelegate(oldItem.gameObject);
+            }
+
             return oldItem;
         }
 
@@ -61,6 +74,10 @@ namespace Collect.Slots {
          public void AddItem(Draggable item) {
             this.item = item;
             item.transform.SetParent(transform);
+
+            if (itemAddedDelegate != null) {
+                itemAddedDelegate(item.gameObject);
+            }
         }
     }
 }

@@ -8,6 +8,11 @@ namespace Collect.Utils {
         private static Canvas CurrentCanvas;
         private static readonly string canvasName = "Canvas";
 
+        /**
+         *  Retrieve the canvas currently on the scene,
+         *  as long as it's named `Canvas`!
+         *
+         **/
         public static Canvas GetCanvas() {
             if (CurrentCanvas != null) {
                 return CurrentCanvas;
