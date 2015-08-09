@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Collect.Slots;
-using Collect.Handlers;
+using Collect.Items;
 using System;
 
 namespace Collect.Containers {

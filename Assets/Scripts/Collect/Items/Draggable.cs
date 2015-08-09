@@ -6,9 +6,9 @@ using System;
 using Collect.Slots;
 using Collect.Events;
 
-namespace Collect.Handlers {
+namespace Collect.Items {
 
-    [AddComponentMenu("Collect/Handler/Drag Handler")]
+    [AddComponentMenu("Collect/Items/Draggable Item")]
     public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
         [Tooltip("The item currently being dragged")]

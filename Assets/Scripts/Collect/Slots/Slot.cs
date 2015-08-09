@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-using Collect.Handlers;
+using Collect.Items;
 
 namespace Collect.Slots {
 

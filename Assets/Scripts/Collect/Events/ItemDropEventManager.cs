@@ -2,7 +2,7 @@
 using System.Collections;
 
 using UnityEngine.EventSystems;
-using Collect.Handlers;
+using Collect.Items;
 using Collect.Slots;
 
 namespace Collect.Events {
