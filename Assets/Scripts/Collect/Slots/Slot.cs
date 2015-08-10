@@ -31,7 +31,12 @@ namespace Collect.Slots {
          *  into the slot OR swap the item.
          *
          **/
-        public void OnDrop(PointerEventData eventData) {
+        public virtual void OnDrop(PointerEventData eventData) {
+
+            if (eventData.used) {
+                return;
+            }
+
             if (Item == null) {
                 AddItem(Draggable.DraggedItem);
             } else {

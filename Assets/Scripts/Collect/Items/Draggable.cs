@@ -94,7 +94,9 @@ namespace Collect.Items {
                 transform.SetParent(oldSlot.transform);
                 oldSlot.Item = this;
 
-                ItemDropEventManager.TriggerItemDidDrop(gameObject, oldSlot, eventData);
+                if (!eventData.used) {
+                    ItemDropEventManager.TriggerItemDidDrop(gameObject, oldSlot, eventData);
+                }
             }
 
             oldSlot = null;
