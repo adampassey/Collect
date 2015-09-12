@@ -2103,4 +2103,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tooltipPrefab: {fileID: 156888, guid: 74e1b9d102c21cf4bb6496c78d40bea3, type: 2}
-  text: test <b>bold?</b> but I'm not bold.
+  text: '<b>Check Box</b>
+
+
+    The <b>Check Box</b> is an item that has a pick up and put down sound, as well
+    as this tooltip.
+
+
+    Item Type: <i>None</i>'

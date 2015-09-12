@@ -23,10 +23,17 @@ namespace Collect.Items.Tooltips {
             text.text = textValue;
         }
 
+        /**
+         *  Set's the `textValue` string to passed
+         *  string `text`
+         **/
         public void Display(string text) {
             textValue = text;
         }
 
+        /**
+         *  Destroys this tooltip
+         **/
         public void Hide() {
             Destroy(gameObject);
         }

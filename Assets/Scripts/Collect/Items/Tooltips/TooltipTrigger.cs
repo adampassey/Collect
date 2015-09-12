@@ -23,6 +23,8 @@ namespace Collect.Items.Tooltips {
 
         private Tooltip tooltip;
 
+        //  The Rect Transform of this object
+        //  Used to determine bounds
         private RectTransform rectTransform;
 
         public void Start() {
@@ -36,6 +38,12 @@ namespace Collect.Items.Tooltips {
             }
         }
 
+        /**
+         *  If an item is not being dragged (and necessary
+         *  prefabs/components are set), this will use the
+         *  `TooltipFactory` to create a new Tooltip
+         *  at the location around this objects `RectTransform`
+         **/
         public void OnPointerEnter(PointerEventData eventData) {
             if (tooltipPrefab == null || rectTransform == null) {
                 return;
@@ -46,14 +54,19 @@ namespace Collect.Items.Tooltips {
                 return;
             }
 
-            tooltip = TooltipDispatcher.Dispatch(tooltipPrefab, text, rectTransform);
+            tooltip = TooltipFactory.Create(tooltipPrefab, text, rectTransform);
         }
 
+        /**
+         *  Hide the tooltip (which automatically gets destroyed)
+         *  and set the current tooltip to `null`.
+         **/
         public void OnPointerExit(PointerEventData eventData) {
             if (tooltip == null) {
                 return;
             }
 
+            //  TODO: this is gross
             tooltip.Hide();
             tooltip = null;
         }

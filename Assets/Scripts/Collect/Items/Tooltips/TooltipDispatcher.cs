@@ -6,9 +6,21 @@ using Collect.Utils;
 
 namespace Collect.Items.Tooltips {
 
-    public class TooltipDispatcher {
+    public class TooltipFactory {
 
-        public static Tooltip Dispatch(GameObject prefab, string text, RectTransform trigger) {
+        /**
+         *  Create a new tooltip of prefab type, with text content,
+         *  using the trigger as bounds to appear around.
+         *
+         *  @param GameObject prefab The tooltip prefab (must have 
+         *      a `Tooltip` component attached
+         *  @param string text The string value to insert into the 
+         *      tooltip
+         *  @param RectTransform trigger The RectTransform that triggered
+         *      this tooltip. This method will move the tooltip to the
+         *      right bounds of this RectTransform
+         **/
+        public static Tooltip Create(GameObject prefab, string text, RectTransform trigger) {
 
             Canvas canvas = CanvasHelper.GetCanvas();
             GameObject tooltipObject = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
