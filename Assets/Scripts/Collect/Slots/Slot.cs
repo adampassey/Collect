@@ -3,14 +3,15 @@ using System.Collections;
 
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System;
 
 using Collect.Items;
+using Collect.Exceptions;
+using System;
 
 namespace Collect.Slots {
 
     [AddComponentMenu("Collect/Slots/Slot")]
-    public class Slot : MonoBehaviour, IDropHandler {
+    public class Slot : MonoBehaviour, IDropHandler, IPointerClickHandler {
 
         //  the item in this slot
         public Draggable Item;
@@ -26,20 +27,48 @@ namespace Collect.Slots {
         }
 
         /**
+         *  When this slot is clicked it will invoke an 
+         *  `OnPointerClick` event. This is useful if an item
+         *  is dropped onto an empty slot (otherwise the event
+         *  will be consumed by the item in the slot)
+         **/
+        public void OnPointerClick(PointerEventData eventData) {
+            if (eventData.used || Draggable.DraggedItem == null) {
+                return;
+            }
+
+            OnDrop(eventData);
+        }
+
+        /**
          *  This event is fired when an item is dropped
          *  onto this slot. Will accept the item
          *  into the slot OR swap the item.
          *
          **/
         public virtual void OnDrop(PointerEventData eventData) {
-
-            if (eventData.used) {
+            if (eventData.used || Draggable.DraggedItem == null) {
                 return;
             }
 
             if (Item == null) {
                 AddItem(Draggable.DraggedItem);
             } else {
+
+                Stackable stackableItem = Draggable.DraggedItem.GetComponent<Items.Stackable>();
+                Stackable slotStackableItem = Item.GetComponent<Items.Stackable>();
+
+                //  the dropped item is stackable, as is
+                //  the item in this slot. Attempt to stack.
+                //  will return if successful.
+                if (stackableItem != null && slotStackableItem != null) {
+                    try {
+                        slotStackableItem.Add(stackableItem);
+                        return;
+                    } catch(NotStackableException e) {
+                        Debug.Log("Not able to stack this item: " + e);
+                    }
+                }
 
                 //  swap the item with the item
                 //  that was dropped
@@ -49,12 +78,14 @@ namespace Collect.Slots {
                 otherSlot.AddItem(RemoveItem());
                 AddItem(otherItem);
             }
+
+            Item.OnEndDrag(eventData);
+            eventData.Use();
         }
 
         /**
          *  Remove the `DragHandler` from this slot.
          *  Will return null if no item is present.
-         *
          **/
         public Draggable RemoveItem() {
             if (Item == null) {
@@ -73,7 +104,6 @@ namespace Collect.Slots {
 
         /**
          *  Add the `DragHandler` to this slot.
-         *
          **/
          public void AddItem(Draggable item) {
             this.Item = item;

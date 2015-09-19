@@ -9,7 +9,7 @@ using Collect.Events;
 namespace Collect.Items {
 
     [AddComponentMenu("Collect/Items/Draggable Item")]
-    public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
+    public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler {
 
         [Tooltip("The item currently being dragged")]
         public static Draggable DraggedItem;
@@ -25,6 +25,7 @@ namespace Collect.Items {
 
         private CanvasGroup canvasGroup;
         private Canvas canvas;
+        private bool beingDragged = false;
 
         /**
          *  Will create a CanvasGroup component on this
@@ -44,12 +45,26 @@ namespace Collect.Items {
         }
 
         /**
+         *  If `beingDragged` is (bool) true, we'll continue
+         *  to follow mouse position.
+         **/
+        public void Update() {
+            if (beingDragged) {
+                followMouse(Input.mousePosition);
+            }
+        }
+
+        /**
          *  This event is fired when the item starts being
          *  dragged. Sets up this specific item to be dragged
          *  and turns off raycasts on this object.
          *
          **/
         public void OnBeginDrag(PointerEventData eventData) {
+            if (eventData.used) {
+                return;
+            }
+
             DraggedItem = this;
             canvasGroup.blocksRaycasts = false;
 
@@ -63,6 +78,23 @@ namespace Collect.Items {
             //  place it in the parent canvas so
             //  it renders above everything else
             transform.SetParent(canvas.transform);
+
+            beingDragged = true;
+        }
+
+        /**
+         *  When this draggable is clicked, we'll either
+         *  initiate dragging with `OnBeginDrag` or we'll
+         *  notify the parent slot that something is being
+         *  dropped on it.
+         **/
+        public void OnPointerClick(PointerEventData eventData) {
+            if (DraggedItem == null) {
+                OnBeginDrag(eventData);
+            } else {
+                Slot slot = GetComponentInParent<Slot>();
+                slot.OnDrop(eventData);
+            }
         }
 
         /**
@@ -71,7 +103,7 @@ namespace Collect.Items {
          *
          **/
         public void OnDrag(PointerEventData eventData) {
-            transform.position = eventData.position;
+            followMouse(eventData.position);
         }
 
         /**
@@ -101,6 +133,33 @@ namespace Collect.Items {
 
             oldSlot = null;
             canvasGroup.blocksRaycasts = true;
+
+            beingDragged = false;
+        }
+
+        /**
+         *  Convenience method to begin drag without having
+         *  to initiate the `OnBeginDrag` event
+         **/
+        public void BeginDrag() {
+            beingDragged = true;
+        }
+
+        /**
+         *  Convenience method to end a drag without
+         *  having to initiate the `OnEndDrag` event
+         **/
+        public void EndDrag() {
+            beingDragged = false;
+        }
+
+        /**
+         *  Reposition this object to the specified
+         *  `Vector3`. Convenient for both manual and
+         *  event-driven following of position
+         **/
+        private void followMouse(Vector3 position) {
+            transform.position = position;
         }
 
         /**
