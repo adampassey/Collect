@@ -65,15 +65,14 @@ namespace Collect.Slots {
                     try {
                         slotStackableItem.Add(stackableItem);
                     } catch (NotStackableException e) {
-                        Debug.Log("Couldn't stack items: " + e);
+                        Debug.Log("Couldn't stack items, swapping: " + e);
+
+                        Slot otherSlot = Draggable.DraggedItem.OldSlot;
+                        otherSlot.AddItem(RemoveItem());
+                        AddItem(Draggable.DraggedItem);
                     }
                     Draggable.DraggedItem.OnEndDrag(eventData);
                     Draggable.DraggedItem = null;
-
-                    TooltipTrigger tooltipTrigger = Item.GetComponent<TooltipTrigger>();
-                    if (tooltipTrigger != null) {
-                        tooltipTrigger.OnPointerEnter(eventData);
-                    }
                 } else {
 
                     //  swap the item with the item
