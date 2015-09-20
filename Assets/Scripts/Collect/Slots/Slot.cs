@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 using Collect.Items;
 using Collect.Exceptions;
-using System;
+using Collect.Items.Tooltips;
 
 namespace Collect.Slots {
 
@@ -69,6 +69,11 @@ namespace Collect.Slots {
                     }
                     Draggable.DraggedItem.OnEndDrag(eventData);
                     Draggable.DraggedItem = null;
+
+                    TooltipTrigger tooltipTrigger = Item.GetComponent<TooltipTrigger>();
+                    if (tooltipTrigger != null) {
+                        tooltipTrigger.OnPointerEnter(eventData);
+                    }
                 } else {
 
                     //  swap the item with the item
