@@ -168,8 +168,12 @@ namespace Collect.Items {
             beingDragged = false;
         }
 
-        public Slot GetParentSlot() {
-            return GetComponentInParent<Slot>();
+        /**
+         *  Whether or not this item is
+         *  currently being dragged
+         **/
+         public bool IsBeingDragged() {
+            return beingDragged;
         }
 
         /**
