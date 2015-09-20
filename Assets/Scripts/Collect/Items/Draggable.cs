@@ -42,6 +42,10 @@ namespace Collect.Items {
             if (canvasGroup == null) {
                 canvasGroup = gameObject.AddComponent<CanvasGroup>();
             }
+
+            if (canvas == null) {
+                canvas = getParentCanvas();
+            }
         }
 
         /**
@@ -61,7 +65,7 @@ namespace Collect.Items {
          *
          **/
         public void OnBeginDrag(PointerEventData eventData) {
-            if (eventData.used) {
+            if (eventData != null && eventData.used) {
                 return;
             }
 
@@ -89,6 +93,11 @@ namespace Collect.Items {
          *  dropped on it.
          **/
         public void OnPointerClick(PointerEventData eventData) {
+gameObject.name);
+            if (eventData != null && eventData.used) {
+                return;
+            }
+
             if (DraggedItem == null) {
                 OnBeginDrag(eventData);
             } else {
@@ -151,6 +160,10 @@ namespace Collect.Items {
          **/
         public void EndDrag() {
             beingDragged = false;
+        }
+
+        public Slot GetParentSlot() {
+            return GetComponentInParent<Slot>();
         }
 
         /**

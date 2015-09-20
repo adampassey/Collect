@@ -64,19 +64,28 @@ namespace Collect.Slots {
                 if (stackableItem != null && slotStackableItem != null) {
                     try {
                         slotStackableItem.Add(stackableItem);
-                        return;
-                    } catch(NotStackableException e) {
-                        Debug.Log("Not able to stack this item: " + e);
+                    } catch (NotStackableException e) {
+                        Debug.Log("Couldn't stack items: " + e);
                     }
+                    Draggable.DraggedItem.OnEndDrag(eventData);
+                    Draggable.DraggedItem = null;
+                } else {
+
+                    //  swap the item with the item
+                    //  that was dropped
+                    Draggable otherItem = Draggable.DraggedItem;
+                    Slot otherSlot = otherItem.OldSlot;
+
+                    //  if other slot is currently occupied,
+                    //  the draggable item will need to be
+                    //  dropped before it can be swapped
+                    if (otherSlot.Item != null) {
+                        return;
+                    }
+
+                    otherSlot.AddItem(RemoveItem());
+                    AddItem(otherItem);
                 }
-
-                //  swap the item with the item
-                //  that was dropped
-                Draggable otherItem = Draggable.DraggedItem;
-                Slot otherSlot = otherItem.OldSlot;
-
-                otherSlot.AddItem(RemoveItem());
-                AddItem(otherItem);
             }
 
             Item.OnEndDrag(eventData);

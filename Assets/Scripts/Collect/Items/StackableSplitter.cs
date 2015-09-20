@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+using Collect.Slots;
+
 namespace Collect.Items {
 
     [AddComponentMenu("Collect/Items/Stackable Item Splitter")]
@@ -34,7 +36,15 @@ namespace Collect.Items {
 
             if (Input.GetKeyDown(KeyCode.Return) || 
                 Input.GetKeyDown(KeyCode.KeypadEnter)) {
-                Stack.Remove(int.Parse(inputField.text));
+                Stackable newStack = Stack.Remove(int.Parse(inputField.text));
+                Slot parentSlot = Stack.GetParentSlot();
+
+                Draggable newDraggableStack = newStack.GetComponent<Draggable>();
+                newDraggableStack.OnBeginDrag(null);
+
+                if (Stack.Size() < newStack.Size()) {
+                    parentSlot.Item = Stack.GetComponent<Draggable>();
+                }
             }
         }
     }
