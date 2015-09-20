@@ -93,7 +93,6 @@ namespace Collect.Items {
          *  dropped on it.
          **/
         public void OnPointerClick(PointerEventData eventData) {
-gameObject.name);
             if (eventData != null && eventData.used) {
                 return;
             }
