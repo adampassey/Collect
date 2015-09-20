@@ -36,6 +36,8 @@ namespace Collect.Items {
 
             if (Input.GetKeyDown(KeyCode.Return) || 
                 Input.GetKeyDown(KeyCode.KeypadEnter)) {
+                
+                //  TODO: Handle `0` case
                 Stackable newStack = Stack.Remove(int.Parse(inputField.text));
                 Slot parentSlot = Stack.GetParentSlot();
 
