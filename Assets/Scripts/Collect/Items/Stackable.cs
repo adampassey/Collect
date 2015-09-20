@@ -23,14 +23,11 @@ namespace Collect.Items {
         [Tooltip("Stack of items")]
         public List<Stackable> Stack = new List<Stackable>();
 
-        private Draggable draggable;
         private Text countLabel;
         private const string countLabelName = "Count Label";
 
         // Use this for initialization
         void Start() {
-            draggable = GetComponent<Draggable>();
-
             countLabel = GetComponentInChildren<Text>();
 
             if (countLabel == null) {

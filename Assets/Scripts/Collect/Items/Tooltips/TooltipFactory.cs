@@ -26,9 +26,6 @@ namespace Collect.Items.Tooltips {
             GameObject tooltipObject = GameObject.Instantiate(prefab, Vector3.zero, Quaternion.identity) as GameObject;
             tooltipObject.transform.SetParent(canvas.transform);
 
-            //  Move the tooltip
-            RectTransform rectTransform = tooltipObject.GetComponent<RectTransform>();
-
             //  TODO: if the tooltip is off the screen, reposition
             //  should this be moved elsewhere? In the tooltip itself?
             Vector3 newPosition = trigger.position;
