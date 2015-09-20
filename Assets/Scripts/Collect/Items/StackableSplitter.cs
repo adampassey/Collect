@@ -42,6 +42,8 @@ namespace Collect.Items {
                 Draggable newDraggableStack = newStack.GetComponent<Draggable>();
                 newDraggableStack.OnBeginDrag(null);
 
+                //  put the stack back in the slot
+                //  as it will be picked up (which we don't want)
                 if (Stack.Size() < newStack.Size()) {
                     parentSlot.Item = Stack.GetComponent<Draggable>();
                 }

@@ -11,5 +11,10 @@ namespace Collect.Static.Inputs {
             public static readonly string TOGGLE = "Inventory Open";
         }
 
+        public static class General {
+
+            public static readonly string FIRE = "Fire1";
+        }
+
     }
 }

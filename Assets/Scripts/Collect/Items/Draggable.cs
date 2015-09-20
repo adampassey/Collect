@@ -5,6 +5,7 @@ using System;
 
 using Collect.Slots;
 using Collect.Events;
+using Collect.Static.Inputs;
 
 namespace Collect.Items {
 
@@ -55,6 +56,12 @@ namespace Collect.Items {
         public void Update() {
             if (beingDragged) {
                 followMouse(Input.mousePosition);
+
+                if (Input.GetButtonDown(InputName.General.FIRE) &&
+                    !EventSystem.current.IsPointerOverGameObject()) {
+                    PointerEventData data = new PointerEventData(EventSystem.current);
+                    OnEndDrag(data);
+                }
             }
         }
 
