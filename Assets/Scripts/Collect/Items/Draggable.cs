@@ -72,7 +72,7 @@ namespace Collect.Items {
          *
          **/
         public void OnBeginDrag(PointerEventData eventData) {
-            if (eventData != null && eventData.used) {
+            if ((eventData != null && eventData.used) || DraggedItem != null) {
                 return;
             }
 
@@ -81,10 +81,6 @@ namespace Collect.Items {
 
             oldSlot = GetComponentInParent<Slot>();
             oldSlot.RemoveItem();
-
-            if (canvas == null) {
-                canvas = getParentCanvas();
-            }
 
             //  place it in the parent canvas so
             //  it renders above everything else
@@ -114,11 +110,15 @@ namespace Collect.Items {
 
         /**
          *  While this object is being dragged it will
-         *  follow the position of the event. 
+         *  follow the position of the event. Will only
+         *  follow the mouse if this is the item that is
+         *  registered as being dragged.
          *
          **/
         public void OnDrag(PointerEventData eventData) {
-            followMouse(eventData.position);
+            if (DraggedItem == this) {
+                followMouse(eventData.position);
+            }
         }
 
         /**
@@ -172,7 +172,7 @@ namespace Collect.Items {
          *  Whether or not this item is
          *  currently being dragged
          **/
-         public bool IsBeingDragged() {
+        public bool IsBeingDragged() {
             return beingDragged;
         }
 

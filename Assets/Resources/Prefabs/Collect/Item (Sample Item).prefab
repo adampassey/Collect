@@ -95,7 +95,10 @@ MonoBehaviour:
     as this tooltip.
 
 
-    Item Type: <i>None</i>'
+    Item Type: <i>None</i>
+
+
+    <i>Stackable (5)</i>'
 --- !u!114 &11479776
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -221,6 +224,20 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: max
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: text
+      value: '<b>Check Box</b>
+
+
+        The <b>Check Box</b> is an item that has a pick up and put down sound, as
+        well as this tooltip.
+
+
+        Item Type: <i>None</i>
+
+
+        <i>Stackable (5)</i>'
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}

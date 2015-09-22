@@ -133,7 +133,7 @@ namespace Collect.Slots {
         /**
          *  Add the `DragHandler` to this slot.
          **/
-         public void AddItem(Draggable item) {
+        public void AddItem(Draggable item) {
             this.Item = item;
             item.transform.SetParent(transform);
 
