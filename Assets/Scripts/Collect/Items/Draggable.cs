@@ -24,6 +24,14 @@ namespace Collect.Items {
             set { oldSlot = value; }
         }
 
+        //  event that gets fired when a drag begins on this item
+        public delegate void OnDragBegin(PointerEventData eventData);
+        public event OnDragBegin OnDraggableBeginDrag;
+
+        //  event that gets fired when a drag ends on this item
+        public delegate void OnDragEnd(PointerEventData eventData);
+        public event OnDragEnd OnDraggableEndDrag;
+
         private CanvasGroup canvasGroup;
         private Canvas canvas;
         private bool beingDragged = false;
@@ -74,6 +82,10 @@ namespace Collect.Items {
         public void OnBeginDrag(PointerEventData eventData) {
             if ((eventData != null && eventData.used) || DraggedItem != null) {
                 return;
+            }
+
+            if (OnDraggableBeginDrag != null) {
+                OnDraggableBeginDrag(eventData);
             }
 
             DraggedItem = this;
@@ -130,6 +142,10 @@ namespace Collect.Items {
          *  
          **/
         public void OnEndDrag(PointerEventData eventData) {
+            if (OnDraggableEndDrag != null) {
+                OnDraggableEndDrag(eventData);
+            }
+
             DraggedItem = null;
 
             //  if this item is still in the canvas transform
