@@ -28,7 +28,7 @@ namespace Collect.Items {
             draggable.OnDraggableEndDrag += DraggableEndDrag;
         }
 
-        public void OnDisable() {
+        public void OnDestroy() {
             //  unsubscribe
             draggable.OnDraggableBeginDrag -= DraggableBeginDrag;
             draggable.OnDraggableEndDrag -= DraggableEndDrag;
