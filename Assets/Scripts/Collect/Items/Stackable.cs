@@ -56,7 +56,6 @@ namespace Collect.Items {
             }
 
             foreach(Stackable s in stackable.Stack) {
-                //  TODO: handle where you can go over max?
                 Add(s);
             }
 
@@ -107,19 +106,6 @@ namespace Collect.Items {
         }
 
         /**
-         *  Remove an item from the stack and
-         *  prepare it for the scene- this will
-         *  activate the object and clear it from
-         *  the stack.
-         **/
-        private Stackable Get(int index) {
-            Stackable stack = Stack[index];
-            stack.gameObject.SetActive(true);
-            Stack.RemoveAt(index);
-            return stack;
-        }
-
-        /**
          *  The current size of this stack
          **/
         public int Size() {
@@ -159,6 +145,43 @@ namespace Collect.Items {
             } else {
                 countLabel.text = "";
             }
+        }
+
+        /**
+         *  Returns true if otherStack can be
+         *  stacked on this stack
+         **/
+        public bool CanStack(Stackable otherStack) {
+            if (otherStack.GetType() != GetType()) {
+                return false;
+            }
+
+            if (Size() >= max - 1 || Size() + otherStack.Size() >= max - 1) {
+                return false;
+            }
+
+            return true;
+        }
+
+        /**
+         *  Returns true if otherStack is of same
+         *  type
+         **/
+        public bool IsSameType(Stackable otherStack) {
+            return otherStack.GetType() == GetType();
+        }
+
+        /**
+         *  Remove an item from the stack and
+         *  prepare it for the scene- this will
+         *  activate the object and clear it from
+         *  the stack.
+         **/
+        private Stackable Get(int index) {
+            Stackable stack = Stack[index];
+            stack.gameObject.SetActive(true);
+            Stack.RemoveAt(index);
+            return stack;
         }
     }
 }

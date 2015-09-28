@@ -2,7 +2,7 @@
 using System.Collections;
 using Collect.Slots;
 using Collect.Items;
-using System;
+using Collect.Exceptions;
 
 namespace Collect.Containers {
 
@@ -66,17 +66,40 @@ namespace Collect.Containers {
                 throw new MissingComponentException("Adding to Container requires DragHandler component");
             }
 
+            Stackable stackHandler = item.GetComponent<Stackable>();
+            Slot emptySlot = null, stackableSlot = null;
+
             foreach(Slot slot in Slots) {
-                if (slot.Item == null) {
-                    slot.AddItem(dragHandler);
+
+                //  retrieve the first empty slot and retain
+                if (emptySlot == null && slot.Item == null) {
+                    emptySlot = slot;
+
+                //  if there's an item in this slot
+                //  but the item being added is stackable
+                //  check if it can stack
+                } else if (slot.Item && stackHandler != null) {
+                    Stackable itemStack = slot.Item.GetComponent<Stackable>();
+
+                    if (itemStack != null && itemStack.CanStack(stackHandler)) {
+                        stackableSlot = slot;
+                    }
                 }
             }
+
+            //  add the item to the slot
+            //  will prioritize stackable slot
+            if (stackableSlot != null) {
+                stackableSlot.AddItem(dragHandler);
+            } else if (emptySlot != null) {
+                emptySlot.AddItem(dragHandler);
+            }
+
+            throw new NotStackableException("Unable to add item (" + dragHandler.name + ") to container ( " + name + ")");
         }
 
         /**
          *  Remove an item from this slot. 
-         *  Not sure when/how this would be used.
-         *  TODO: Remove?
          *
          **/
         public GameObject Remove(Slot slot) {
