@@ -1,5 +1,5 @@
 # Collect
-A drag-and-drop grid-based inventory system for [Unity 4.6+](https://unity3d.com/learn/tutorials/modules/beginner/live-training-archive/the-new-ui). View a [working example in your web browser](http://adampassey.github.io/collect/Build/Build.html), _Chrome not supported_. **[Collect](https://github.com/adampassey/collect)** makes it easy to a build grid-based inventory and equipment system in the Unity Editor, complete with:
+A drag-and-drop grid-based inventory system for [Unity 4.6+](https://unity3d.com/learn/tutorials/modules/beginner/live-training-archive/the-new-ui). View a [working example in your web browser](http://adampassey.github.io/collect/Build/Build.html), _Chrome not supported_. **[Collect](https://github.com/adampassey/collect)** makes it easy to build a grid-based inventory and equipment system in the Unity Editor, complete with:
 
 * Tooltips
 * Stackable items
