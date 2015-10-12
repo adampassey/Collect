@@ -155,7 +155,7 @@ namespace Collect.Items {
 
                 transform.position = oldSlot.transform.position;
                 transform.SetParent(oldSlot.transform);
-                oldSlot.Item = this;
+                oldSlot.AddItem(this);
 
                 if (!eventData.used) {
                     ItemDropEventManager.TriggerItemDidDrop(gameObject, oldSlot, eventData);
