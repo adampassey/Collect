@@ -11,10 +11,10 @@ public class EventSubscriber : MonoBehaviour {
 	void Start () {
 
         //  Listening to the `ItemDidDrop` event
-        ItemDropEventManager.OnItemDidDrop += ItemDidDrop;
+        ItemEventManager.OnItemDidInvalidDrop += ItemDidInvalidDrop;
 	}
 
-    public void ItemDidDrop(GameObject item, Slot slot, PointerEventData data) {
+    public void ItemDidInvalidDrop(GameObject item, Slot slot, PointerEventData data) {
         Debug.Log(item.name);
         Debug.Log(slot.Item.name);
         Debug.Log(slot.name);

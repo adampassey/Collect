@@ -72,20 +72,20 @@ public class ContainerListener : MonoBehaviour {
     
     //  subscribe to both item added and 
     //  removed events
-    container.ItemWasAdded += ItemWasAdded;
-    container.ItemWasRemvoed += ItemWasRemoved;
+    container.ItemWasAdded += ItemWasAddedCallback;
+    container.ItemWasRemvoed += ItemWasRemovedCallback;
   }
   
   public void OnDestroy() {
-    container.ItemWasAdded -= ItemWasAdded;
-    container.ItemWasRemoved -= ItemWasRemoved;
+    container.ItemWasAdded -= ItemWasAddedCallback;
+    container.ItemWasRemoved -= ItemWasRemovedCallback;
   }
   
-  public void ItemWasAdded(GameObject item) {
+  public void ItemWasAddedCallback(GameObject item) {
     Debug.Log("An item was added to this container: " + item.name);
   }
   
-  public void ItemWasRemoved(GameObject item) {
+  public void ItemWasRemovedCallback(GameObject item) {
     Debug.Log("An item was removed from this container: " + item.name);
   }
 }
@@ -111,20 +111,20 @@ public class DraggableListener : MonoBehaviour {
     draggable = GetComponent<Draggable>();
     
     //  subscribe to drag begin and end events
-    draggable.OnDraggableBeginDrag += DraggableBeginDrag;
-    draggable.OnDraggableEndDrag += DraggableEndDrag;
+    draggable.OnDragBegin += BeginDragCallback;
+    draggable.OnDragEnd += EndDragCallback;
   }
   
   public void OnDestroy() {
-    draggable.OnDraggableBeginDrag -= DraggableBeginDrag;
-    draggable.OnDraggableEndDrag -= DraggableEndDrag;
+    draggable.OnDragBegin -= BeginDragCallback;
+    draggable.OnDragEnd -= EndDragCallback;
   }
   
-  public void DraggableBeginDrag(PointerEventData eventData) {
+  public void BeginDragCallback(PointerEventData eventData) {
     Debug.Log("Beginning drag");
   }
   
-  public void DraggableEndDrag(PointerEventData eventData) {
+  public void EndDragCallback(PointerEventData eventData) {
     Debug.Log("Ending drag");
   }
 }
@@ -136,15 +136,40 @@ Sometimes, `Draggable` items are dropped in _invalid_ locations. When this happe
 public class EventSubscriber : MonoBehaviour {
 
   public void Start() {
-    ItemDropEventManager.OnItemDidDrop += ItemDidDrop;
+    ItemEventManager.OnItemDidInvalidDrop += ItemInvalidDropCallback;
   }
   
   public void OnDestroy() {
-    ItemDropEventManager.OnItemDidDrop -= ItemDidDrop;
+    ItemEventManager.OnItemDidInvalidDrop -= ItemInvalidDropCallback;
   }
   
-  public void ItemDidDrop(GameObject item, Slot slot, PointerEventData data) {
+  public void ItemInvalidDropCallback(GameObject item, Slot slot, PointerEventData data) {
     //  handle item drop or delete
+  }
+}
+```
+
+The `ItemEventManager` also exposes general events for when any item is picked up or dropped (this is great for adjusting the mouse or other icons):
+
+```c#
+public class MouseEventSubscriber : MonoBehaviour {
+
+  public void Start() {
+    ItemEventManager.OnItemDidDrop += ItemDidDropCallback;
+    ItemEventManager.OnItemDidPickup += ItemDidPickupCallback;
+  }
+  
+  public void OnDestroy() {
+    ItemEventManager.OnItemDidDrop -= ItemDidDropCallback;
+    ItemEventManager.OnItemDidPickup -= ItemDidPickupCallback;
+  }
+  
+  public void ItemDidDropCallback(GameObject item, PointerEventData data) {
+    //  handle any item drop
+  }
+
+  public void ItemDidPickupCallback(GameObject item, PointerEventData data) {
+  	//	handle any item pickup
   }
 }
 ```

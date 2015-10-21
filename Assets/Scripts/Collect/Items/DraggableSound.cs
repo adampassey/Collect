@@ -7,7 +7,7 @@ namespace Collect.Items {
 
     [RequireComponent(typeof(Draggable))]
     [AddComponentMenu("Collect/Items/Draggable Item Sound")]
-    public class DraggableSound : MonoBehaviour, IBeginDragHandler, IEndDragHandler {
+    public class DraggableSound : MonoBehaviour {
 
         [Tooltip("The sound played when this item is picked up")]
         public AudioClip PickUpSound;
@@ -24,50 +24,37 @@ namespace Collect.Items {
             }
 
             //  subscribe to events
-            draggable.OnDraggableBeginDrag += DraggableBeginDrag;
-            draggable.OnDraggableEndDrag += DraggableEndDrag;
+            draggable.OnBeginDragCallback += BeginDragCallback;
+            draggable.OnEndDragCallback += EndDragCallback;
         }
 
         public void OnDestroy() {
             //  unsubscribe
-            draggable.OnDraggableBeginDrag -= DraggableBeginDrag;
-            draggable.OnDraggableEndDrag -= DraggableEndDrag;
-        }
-
-        /**
-         *  When the item is picked up, it will automatically
-         *  played the attached PickUpSound
-         *
-         **/
-        public void OnBeginDrag(PointerEventData eventData) {
-            if (PickUpSound != null) {
-                AudioSource.PlayClipAtPoint(PickUpSound, transform.position);
-            }
-        }
-
-        /**
-         *  When an item is dropped (successful or not), it will
-         *  automatically play the PutDownSound
-         *
-         **/
-        public void OnEndDrag(PointerEventData eventData) {
-            if (PutDownSound != null) {
-                AudioSource.PlayClipAtPoint(PutDownSound, transform.position);
-            }
+            draggable.OnBeginDragCallback -= BeginDragCallback;
+            draggable.OnEndDragCallback -= EndDragCallback;
         }
 
         /**
          *  Subscribes to `Draggable.OnDraggableBeginDrag`
          **/
-        public void DraggableBeginDrag(PointerEventData eventData) {
-            OnBeginDrag(eventData);
+        public void BeginDragCallback(PointerEventData eventData) {
+            playAudioClip(PickUpSound);
         }
 
         /**
          *  Subscribes to `Draggable.OnDraggableEndDrag`
          **/
-        public void DraggableEndDrag(PointerEventData eventData) {
-            OnEndDrag(eventData);
+        public void EndDragCallback(PointerEventData eventData) {
+            playAudioClip(PutDownSound);
+        }
+
+        /**
+         *  Play an `AudioClip` at this objects' location
+         **/
+        private void playAudioClip(AudioClip audioClip) {
+            if (audioClip != null) {
+                AudioSource.PlayClipAtPoint(audioClip, transform.position);
+            }
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.EventSystems;
-using System;
 
 using Collect.Slots;
 using Collect.Events;
@@ -26,11 +24,11 @@ namespace Collect.Items {
 
         //  event that gets fired when a drag begins on this item
         public delegate void OnDragBegin(PointerEventData eventData);
-        public event OnDragBegin OnDraggableBeginDrag;
+        public event OnDragBegin OnBeginDragCallback;
 
         //  event that gets fired when a drag ends on this item
         public delegate void OnDragEnd(PointerEventData eventData);
-        public event OnDragEnd OnDraggableEndDrag;
+        public event OnDragEnd OnEndDragCallback;
 
         private CanvasGroup canvasGroup;
         private Canvas canvas;
@@ -65,6 +63,7 @@ namespace Collect.Items {
             if (beingDragged) {
                 followMouse(Input.mousePosition);
 
+                //  this is for invalid location drops
                 if (Input.GetButtonDown(InputName.General.FIRE) &&
                     !EventSystem.current.IsPointerOverGameObject()) {
                     PointerEventData data = new PointerEventData(EventSystem.current);
@@ -84,8 +83,8 @@ namespace Collect.Items {
                 return;
             }
 
-            if (OnDraggableBeginDrag != null) {
-                OnDraggableBeginDrag(eventData);
+            if (OnBeginDragCallback != null) {
+                OnBeginDragCallback(eventData);
             }
 
             DraggedItem = this;
@@ -99,6 +98,9 @@ namespace Collect.Items {
             transform.SetParent(canvas.transform);
 
             beingDragged = true;
+
+            //  trigger the item did get picked up event
+            ItemEventManager.TriggerItemDidPickup(gameObject, eventData);
         }
 
         /**
@@ -142,8 +144,11 @@ namespace Collect.Items {
          *  
          **/
         public void OnEndDrag(PointerEventData eventData) {
-            if (OnDraggableEndDrag != null) {
-                OnDraggableEndDrag(eventData);
+            //  OnEndDrag can be triggered via mouse down
+            //  or mouse up, if there is no currently dragged
+            //  item the event has already been fired
+            if (DraggedItem == null) {
+                return;
             }
 
             DraggedItem = null;
@@ -158,7 +163,7 @@ namespace Collect.Items {
                 oldSlot.AddItem(this);
 
                 if (!eventData.used) {
-                    ItemDropEventManager.TriggerItemDidDrop(gameObject, oldSlot, eventData);
+                    ItemEventManager.TriggerItemDidInvalidDrop(gameObject, oldSlot, eventData);
                 }
             }
 
@@ -166,6 +171,13 @@ namespace Collect.Items {
             canvasGroup.blocksRaycasts = true;
 
             beingDragged = false;
+
+            //  trigger necessary events
+            if (OnEndDragCallback != null) {
+                OnEndDragCallback(eventData);
+            }
+
+            ItemEventManager.TriggerItemDidDrop(gameObject, eventData);
         }
 
         /**
