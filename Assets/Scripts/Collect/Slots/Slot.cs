@@ -27,12 +27,14 @@ namespace Collect.Slots {
         }
 
         /**
-         *  When this slot is clicked it will invoke an 
+         *  <summary>When this slot is clicked it will invoke an 
          *  `OnPointerClick` event. This is useful if an item
          *  is dropped onto an empty slot (otherwise the event
-         *  will be consumed by the item in the slot)
+         *  will be consumed by the item in the slot)</summary>
+         *
+         *  <param name="eventData">The event data</param>
          **/
-        public void OnPointerClick(PointerEventData eventData) {
+        public virtual void OnPointerClick(PointerEventData eventData) {
             if (eventData.used || Draggable.DraggedItem == null) {
                 return;
             }
@@ -41,16 +43,19 @@ namespace Collect.Slots {
         }
 
         /**
-         *  This event is fired when an item is dropped
+         *  <summary>This event is fired when an item is dropped
          *  onto this slot. Will accept the item
-         *  into the slot OR swap the item.
+         *  into the slot OR swap the item.</summary>
          *
+         *  <param name="eventData">The event data</param>
          **/
         public virtual void OnDrop(PointerEventData eventData) {
             if (eventData.used || Draggable.DraggedItem == null) {
                 return;
             }
 
+            //  if this slot doesn't have an item,
+            //  add this one
             if (Item == null) {
                 AddItem(Draggable.DraggedItem);
             } else {
@@ -78,9 +83,8 @@ namespace Collect.Slots {
                             );
                         }
 
+                    //  if the item isn't stackable, swap items
                     } catch (NotStackableException e) {
-                        Debug.Log("Couldn't stack items, swapping: " + e);
-
                         Slot otherSlot = Draggable.DraggedItem.OldSlot;
                         otherSlot.AddItem(RemoveItem());
                         AddItem(Draggable.DraggedItem);
@@ -102,8 +106,22 @@ namespace Collect.Slots {
                         return;
                     }
 
-                    otherSlot.AddItem(RemoveItem());
-                    AddItem(otherItem);
+                    //  try to swap items- will only fail
+                    //  if one slot requires a specific 
+                    //  `ItemType`
+                    try {
+                        //  don't remove the item from
+                        //  this slot until it successfully
+                        //  gets added to the other slot
+                        Draggable itemInThisSlot = Item;
+                        otherSlot.AddItem(itemInThisSlot);
+
+                        RemoveItem();
+                        AddItem(otherItem);
+                    } catch(CannotAddItemException e) {
+                        Debug.LogWarning(e);
+                        return;
+                    }
                 }
             }
 
@@ -112,10 +130,10 @@ namespace Collect.Slots {
         }
 
         /**
-         *  Remove the `DragHandler` from this slot.
-         *  Will return null if no item is present.
+         *  <summary>Remove the `DragHandler` from this slot.
+         *  Will return null if no item is present.</summary>
          **/
-        public Draggable RemoveItem() {
+        public virtual Draggable RemoveItem() {
             if (Item == null) {
                 return null;
             }
@@ -131,9 +149,9 @@ namespace Collect.Slots {
         }
 
         /**
-         *  Add the `DragHandler` to this slot.
+         *  <summary>Add the `DragHandler` to this slot.</summary>
          **/
-        public void AddItem(Draggable item) {
+        public virtual void AddItem(Draggable item) {
             this.Item = item;
             item.transform.SetParent(transform);
 
