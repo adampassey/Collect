@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System;
-
 using UnityEngine.UI;
 
 namespace Collect.Items.Tooltips {
 
+    /// <summary>
+    /// A tooltip component that supports displaying of text
+    /// and hooks for displaying and hiding
+    /// </summary>
     [AddComponentMenu("Collect/Items/Tooltips/Standard Tooltip")]
     public class StandardTooltip : MonoBehaviour, Tooltip {
 
@@ -23,17 +24,17 @@ namespace Collect.Items.Tooltips {
             text.text = textValue;
         }
 
-        /**
-         *  Set's the `textValue` string to passed
-         *  string `text`
-         **/
+        /// <summary>
+        /// Display the tooltip with the passed text as content
+        /// </summary>
+        /// <param name="text">The text to display</param>
         public void Display(string text) {
             textValue = text;
         }
 
-        /**
-         *  Destroys this tooltip
-         **/
+        /// <summary>
+        /// Hide and consequently destroy this tooltip
+        /// </summary>
         public void Hide() {
             Destroy(gameObject);
         }

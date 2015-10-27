@@ -1,16 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
-
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using System;
-
 using Collect.Exceptions;
-using Collect.Items.Tooltips;
-using Collect.Utils;
 
 namespace Collect.Items.Tooltips {
 
+    /// <summary>
+    /// Attach to any `GameObject` to support mouseover/mouseout
+    /// `Tooltip` display. Allows flexibility to support different
+    /// tooltips via associated prefab.
+    /// </summary>
     [AddComponentMenu("Collect/Items/Tooltips/Tooltip Trigger")]
     public class TooltipTrigger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
@@ -27,6 +25,10 @@ namespace Collect.Items.Tooltips {
         //  Used to determine bounds
         private RectTransform rectTransform;
 
+        /// <summary>
+        /// Will attempt to retrieve the `Tooltip` prefab and 
+        /// `RectTransform`, throwing exceptions if either doesn't exist
+        /// </summary>
         public void Start() {
             if (tooltipPrefab == null) {
                 throw new MissingPrefabException("Must have a tooltip prefab attached to a `TooltipTrigger`");
@@ -38,12 +40,12 @@ namespace Collect.Items.Tooltips {
             }
         }
 
-        /**
-         *  If an item is not being dragged (and necessary
-         *  prefabs/components are set), this will use the
-         *  `TooltipFactory` to create a new Tooltip
-         *  at the location around this objects `RectTransform`
-         **/
+        /// <summary>
+        /// When moused over, and if an item is _not_ being dragged,
+        /// this will use the `TooltipFactory` to instantiate a new
+        /// `Tooltip` at the location around the associated `RectTransform`
+        /// </summary>
+        /// <param name="eventData">The `PointerEventData` of the event</param>
         public void OnPointerEnter(PointerEventData eventData) {
             if (tooltipPrefab == null || rectTransform == null) {
                 return;
@@ -57,10 +59,11 @@ namespace Collect.Items.Tooltips {
             tooltip = TooltipFactory.Create(tooltipPrefab, text, rectTransform);
         }
 
-        /**
-         *  Hide the tooltip (which automatically gets destroyed)
-         *  and set the current tooltip to `null`.
-         **/
+        /// <summary>
+        /// On mouse out, hide the tooltip (which in turn, gets destroyed)
+        /// and set the current tooltip to `null`
+        /// </summary>
+        /// <param name="eventData">The `PointerEventData` of the event</param>
         public void OnPointerExit(PointerEventData eventData) {
             if (tooltip == null) {
                 return;
