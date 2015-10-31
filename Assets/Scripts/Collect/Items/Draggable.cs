@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
-
 using Collect.Slots;
 using Collect.Events;
 using Collect.Static.Inputs;
 
 namespace Collect.Items {
 
+    /// <summary>
+    /// Will allow an object to be picked up on click or
+    /// on click & hold. `Draggable` components can be
+    /// dropped into `Slot`'s.
+    /// </summary>
     [AddComponentMenu("Collect/Items/Draggable Item")]
     public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler {
 
@@ -34,16 +38,12 @@ namespace Collect.Items {
         private Canvas canvas;
         private bool beingDragged = false;
 
-        /**
-         *  Will create a CanvasGroup component on this
-         *  object if it does not already exist. This
-         *  keeps the children aligned properly.
-         *
-         *  Will also retrieve the parent slot if this
-         *  item starts in a slot and create a reference
-         *  to itself in the slot.
-         *
-         **/
+        /// <summary>
+        /// Will create a `CanvasGroup` component on this
+        /// object if it does not already exist. This keeps
+        /// the children aligned properly. Also retrieves
+        /// the parent canvas of the objec.t
+        /// </summary>
         public void Start() {
             canvasGroup = GetComponent<CanvasGroup>();
             if (canvasGroup == null) {
@@ -55,10 +55,10 @@ namespace Collect.Items {
             }
         }
 
-        /**
-         *  If `beingDragged` is (bool) true, we'll continue
-         *  to follow mouse position.
-         **/
+        /// <summary>
+        /// If `beingDragged` is (bool) true, we'll continue
+        /// to follow the mouse position
+        /// </summary>
         public void Update() {
             if (beingDragged) {
                 followMouse(Input.mousePosition);
@@ -72,12 +72,13 @@ namespace Collect.Items {
             }
         }
 
-        /**
-         *  This event is fired when the item starts being
-         *  dragged. Sets up this specific item to be dragged
-         *  and turns off raycasts on this object.
-         *
-         **/
+        /// <summary>
+        /// This event is automatically fired automatically
+        /// as this object is a MonoBehaviour. If the event
+        /// is already used, or there is an item already 
+        /// being dragged, will do nothing.
+        /// </summary>
+        /// <param name="eventData">The `PointerEventData` of the event</param>
         public void OnBeginDrag(PointerEventData eventData) {
             if ((eventData != null && eventData.used) || DraggedItem != null) {
                 return;
@@ -103,12 +104,14 @@ namespace Collect.Items {
             ItemEventManager.TriggerItemDidPickup(gameObject, eventData);
         }
 
-        /**
-         *  When this draggable is clicked, we'll either
-         *  initiate dragging with `OnBeginDrag` or we'll
-         *  notify the parent slot that something is being
-         *  dropped on it.
-         **/
+        /// <summary>
+        /// Called when an item is clicked. If no item is
+        /// currently being dragged, will trigger the 
+        /// `OnBeginDrag` event, otherwise will notify
+        /// the parent slot that something is being
+        /// dropped on it.
+        /// </summary>
+        /// <param name="eventData">The `PointerEventData` of the event</param>
         public void OnPointerClick(PointerEventData eventData) {
             if (eventData != null && eventData.used) {
                 return;
@@ -122,27 +125,26 @@ namespace Collect.Items {
             }
         }
 
-        /**
-         *  While this object is being dragged it will
-         *  follow the position of the event. Will only
-         *  follow the mouse if this is the item that is
-         *  registered as being dragged.
-         *
-         **/
+        /// <summary>
+        /// While this object is being dragged it will
+        /// follow the position of the event. Will only
+        /// follow the mouse if this is the item that is
+        /// registered as being dragged.
+        /// </summary>
+        /// <param name="eventData">The `PointerEventData` of the event</param>
         public void OnDrag(PointerEventData eventData) {
             if (DraggedItem == this) {
                 followMouse(eventData.position);
             }
         }
 
-        /**
-         *  Fired when the item stops being dragged. Will get
-         *  called _after_ `OnDrop` (which `Slot` implements).
-         *  This will test if the item is now inside a different
-         *  slot (as `Slot` will move it if it receives an item).
-         *  It also re-enables raycasts.
-         *  
-         **/
+        /// <summary>
+        /// Called when the item stops being dragged.
+        /// Will get called _after_ `OnDrop` (which `Slot`
+        /// implements). Will trigger the `ItemDidInvalidDrop`
+        /// event if the item wasn't dropped successfully.
+        /// </summary>
+        /// <param name="eventData">The `PointerEventData` of the event</param>
         public void OnEndDrag(PointerEventData eventData) {
             //  OnEndDrag can be triggered via mouse down
             //  or mouse up, if there is no currently dragged
@@ -180,42 +182,29 @@ namespace Collect.Items {
             ItemEventManager.TriggerItemDidDrop(gameObject, eventData);
         }
 
-        /**
-         *  Convenience method to begin drag without having
-         *  to initiate the `OnBeginDrag` event
-         **/
-        public void BeginDrag() {
-            beingDragged = true;
-        }
-
-        /**
-         *  Convenience method to end a drag without
-         *  having to initiate the `OnEndDrag` event
-         **/
-        public void EndDrag() {
-            beingDragged = false;
-        }
-
-        /**
-         *  Whether or not this item is
-         *  currently being dragged
-         **/
+        /// <summary>
+        /// Whether or not this item is currently
+        /// being dragged
+        /// </summary>
+        /// <returns>True if item is being dragged</returns>
         public bool IsBeingDragged() {
             return beingDragged;
         }
 
-        /**
-         *  Reposition this object to the specified
-         *  `Vector3`. Convenient for both manual and
-         *  event-driven following of position
-         **/
+        /// <summary>
+        /// Position this object to the specific
+        /// `Vector3`. Convenient for both manual
+        /// and event-driven following of position.
+        /// </summary>
+        /// <param name="position">The `Vector3` position to follow</param>
         private void followMouse(Vector3 position) {
             transform.position = position;
         }
 
-        /**
-         *  Get the parent Canvas of this object
-         **/
+        /// <summary>
+        /// Get the parent canvas of this object.
+        /// </summary>
+        /// <returns></returns>
         private Canvas getParentCanvas() {
             return GetComponentInParent<Canvas>();
         }

@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
 using Collect.Exceptions;
 using Collect.Slots;
 
 namespace Collect.Items {
 
+    /// <summary>
+    /// Component that allows `Draggable` items to be stacked.
+    /// Will allow items of the same prefab to be stacked
+    /// and unstacked (when clicked with the `keyModifier`
+    /// </summary>
     [AddComponentMenu("Collect/Items/Stackable Item")]
     [RequireComponent(typeof (Draggable))]
     public class Stackable : MonoBehaviour, IPointerClickHandler {
@@ -24,7 +28,10 @@ namespace Collect.Items {
         private Text countLabel;
         private const string countLabelName = "Count Label";
 
-        // Use this for initialization
+        /// <summary>
+        /// Will retrieve the child `Text` component 
+        /// and update it
+        /// </summary>
         void Start() {
             countLabel = GetComponentInChildren<Text>();
 
@@ -35,17 +42,15 @@ namespace Collect.Items {
             UpdateCountLabel();
         }
 
-        /**
-         *  Add an item to this stack. If a `Stackable` item
-         *  is added that has several children, will iterate
-         *  through the children first and add them. Then,
-         *  it will add the final object. 
-         *
-         *  If the size of both stacks is larger than the max
-         *  allowed, will throw a `NotStackableException`
-         *
-         *  @param Stackable stackable - The item to be stacked
-         **/
+        /// <summary>
+        /// Add an item to this stack.If a `Stackable` item
+        /// is added that has several children, will iterate
+        /// through the children first and add them. Then,
+        /// it will add the container of the stack. 
+        /// If the size of both stacks is larger than the max
+        /// allowed, will throw a `NotStackableException`.
+        /// </summary>
+        /// <param name="stackable">The `Stackable` item to stack</param>
         public void Add(Stackable stackable) {
             if (stackable.GetType() != GetType()) {
                 throw new NotStackableException("Unable to stack, these items are not of the same type");
@@ -66,16 +71,19 @@ namespace Collect.Items {
             UpdateCountLabel();
         }
 
-        /**
-         *  Remove the specified number of items
-         *  from this stack. Will return `this` if
-         *  count requested is larger (or equal to)
-         *  current size.
-         *
-         *  If not, will pop off the top of the stack
-         *  and create a new `Stackable` that will then
-         *  be returned
-         **/
+        /// <summary>
+        /// Remove the specified number of items
+        /// from this stack.Will return `this` if
+        /// count requested is larger (or equal to)
+        /// current size.
+        /// 
+        /// If not, will pop off the top of the stack
+        /// and create a new `Stackable` that will then
+        /// be returned.
+        /// </summary>
+        /// <param name="requestedCount">The number of `Stackable`
+        /// items to return</param>
+        /// <returns>A new `Stackable`</returns>
         public Stackable Remove(int requestedCount) {
             if (requestedCount - 1 >= Size()) {
                 return this;
@@ -97,28 +105,31 @@ namespace Collect.Items {
             return baseStackable;
         }
 
-        /**
-         *  Convenience method to remove a 
-         *  single item from the stack
-         **/
+        /// <summary>
+        /// Convenience method to remove a
+        /// single item from the stack
+        /// </summary>
+        /// <returns>A single `Stackable` item</returns>
         public Stackable Remove() {
             return Remove(1);
         }
 
-        /**
-         *  The current size of this stack
-         **/
+        /// <summary>
+        /// Get the current size of the `Stackable`
+        /// </summary>
+        /// <returns></returns>
         public int Size() {
             return Stack.Count;
         }
 
-        /**
-         *  When this stack is clicked, check if the
-         *  user is holding down the key modifier. If
-         *  so, display the `StackableSplitter` which
-         *  allows the user to enter a number to 
-         *  remove from this stack
-         **/
+        /// <summary>
+        /// When this stack is clicked, check if the
+        /// user is holding down the key modifier. If
+        /// so, display the `StackableSplitter` which
+        /// allows the user to enter a number to
+        /// remove from this stack
+        /// </summary>
+        /// <param name="eventData">The `PointerEventData` of the event</param>
         public void OnPointerClick(PointerEventData eventData) {
             if (Input.GetKey(keyModifier)) {
                 StackableSplitterFactory.Create(this);
@@ -126,19 +137,21 @@ namespace Collect.Items {
             }
         }
 
-        /**
-         *  Get the parent slot of this stack. Useful
-         *  when stacking is not possible, and `Draggable`
-         *  does not retain this reference
-         **/
+        /// <summary>
+        /// Get the parent slot of this stack.Useful
+        /// when stacking is not possible, and `Draggable`
+        /// does not retain this reference
+        /// </summary>
+        /// <returns>The parent `Slot`</returns>
         public Slot GetParentSlot() {
             return GetComponentInParent<Slot>();
         }
 
-        /**
-         *  Update the count label assocaited with this
-         *  stack.
-         **/
+        /// <summary>
+        /// Update the count label assocaited with this
+        /// stack. If only 1 item is in this `Stackable`,
+        /// will not display a number.
+        /// </summary>
         public void UpdateCountLabel() {
             if (Size() >= 1) {
                 countLabel.text = Size() + 1 + "/" + max;
@@ -147,10 +160,14 @@ namespace Collect.Items {
             }
         }
 
-        /**
-         *  Returns true if otherStack can be
-         *  stacked on this stack
-         **/
+        /// <summary>
+        /// Returns true if otherStack can be stacked
+        /// onto this stack
+        /// </summary>
+        /// <param name="otherStack">The `Stackable` that may or may not
+        /// be able to be stacked</param>
+        /// <returns>True if passed `Stackable` can be stacked
+        /// on this `Stackable`</returns>
         public bool CanStack(Stackable otherStack) {
             if (otherStack.GetType() != GetType()) {
                 return false;
@@ -163,20 +180,26 @@ namespace Collect.Items {
             return true;
         }
 
-        /**
-         *  Returns true if otherStack is of same
-         *  type
-         **/
+        /// <summary>
+        /// Returns true if otherStack is of same
+        /// type. This should eventually be replaced
+        /// by a custom comparator
+        /// </summary>
+        /// <param name="otherStack">The `Stackable` to compare types with</param>
+        /// <returns>True if passed `Stackable` is of same type</returns>
         public bool IsSameType(Stackable otherStack) {
             return otherStack.GetType() == GetType();
         }
 
-        /**
-         *  Remove an item from the stack and
-         *  prepare it for the scene- this will
-         *  activate the object and clear it from
-         *  the stack.
-         **/
+        /// <summary>
+        /// Remove an item from the stack and
+        /// prepare it for the scene- this will
+        /// activate the object and clear it from
+        /// the stack.
+        /// </summary>
+        /// <param name="index">The position in the stack to retrieve
+        /// the item</param>
+        /// <returns>A new `Stackable` stack</returns>
         private Stackable Get(int index) {
             Stackable stack = Stack[index];
             stack.gameObject.SetActive(true);

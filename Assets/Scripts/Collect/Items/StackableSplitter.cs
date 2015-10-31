@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
-
 using Collect.Slots;
 
 namespace Collect.Items {
 
+    /// <summary>
+    /// The `StackableSplitter` is a UI component that allows
+    /// the user to enter a number of items to pull out of a
+    /// `Stackable` stack.
+    /// </summary>
     [AddComponentMenu("Collect/Items/Stackable Item Splitter")]
     public class StackableSplitter : MonoBehaviour {
 
@@ -15,6 +17,11 @@ namespace Collect.Items {
 
         private InputField inputField;
 
+        /// <summary>
+        /// Get the `InputField` child object of this gameObject
+        /// and activate it so the user does not have to 
+        /// click on it prior to entering a number.
+        /// </summary>
         public void Start() {
             inputField = GetComponentInChildren<InputField>();
 
@@ -25,7 +32,13 @@ namespace Collect.Items {
             inputField.ActivateInputField();
         }
 
-        //  TODO: Can any of this be done event-driven?
+        /// <summary>
+        /// Listens for presses to `KeyCode.Return` or
+        /// `KeyCode.KeypadEnter` and will then
+        /// attempt to retrieve the entered number of
+        /// items from the `Stackable` and kick-off
+        /// the `OnBeginDrag` event on it.
+        /// </summary>
         public void Update() {
             //  if they lose focus on the splitter,
             //  destroy it

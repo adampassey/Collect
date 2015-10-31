@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
-using System.Collections;
-
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
-
 using Collect.Items;
 using Collect.Exceptions;
 using Collect.Items.Tooltips;
 
 namespace Collect.Slots {
 
+    /// <summary>
+    /// Hold `Draggable` objects in this `Slot`. Exposes events
+    /// for when an item is added or removed from this slot.
+    /// </summary>
     [AddComponentMenu("Collect/Slots/Slot")]
     public class Slot : MonoBehaviour, IDropHandler, IPointerClickHandler {
 
@@ -26,14 +26,13 @@ namespace Collect.Slots {
             Item = GetComponentInChildren<Draggable>();
         }
 
-        /**
-         *  <summary>When this slot is clicked it will invoke an 
-         *  `OnPointerClick` event. This is useful if an item
-         *  is dropped onto an empty slot (otherwise the event
-         *  will be consumed by the item in the slot)</summary>
-         *
-         *  <param name="eventData">The event data</param>
-         **/
+        /// <summary>
+        /// When this slot is clicked it will invoke an
+        /// `OnPointerClick` event. This is useful if an item
+        /// is dropped onto an empty slot (otherwise the event
+        /// will be consumed by the item in the slot)
+        /// </summary>
+        /// <param name="eventData">The `PointerEventData` of the event</param>
         public virtual void OnPointerClick(PointerEventData eventData) {
             if (eventData.used || Draggable.DraggedItem == null) {
                 return;
@@ -42,13 +41,13 @@ namespace Collect.Slots {
             OnDrop(eventData);
         }
 
-        /**
-         *  <summary>This event is fired when an item is dropped
-         *  onto this slot. Will accept the item
-         *  into the slot OR swap the item.</summary>
-         *
-         *  <param name="eventData">The event data</param>
-         **/
+        /// <summary>
+        /// This event is fired when an item is dropped
+        /// onto this slot. Will accept the item
+        /// into the slot OR swap the item. If the item is
+        /// `Stackable`, will attempt to stack it
+        /// </summary>
+        /// <param name="eventData">The `PointerEventData` of the event</param>
         public virtual void OnDrop(PointerEventData eventData) {
             if (eventData.used || Draggable.DraggedItem == null) {
                 return;
@@ -129,10 +128,11 @@ namespace Collect.Slots {
             eventData.Use();
         }
 
-        /**
-         *  <summary>Remove the `DragHandler` from this slot.
-         *  Will return null if no item is present.</summary>
-         **/
+        /// <summary>
+        /// Remove the `Draggable` from this slot.
+        /// Will return null if no item is present.
+        /// </summary>
+        /// <returns>The `Draggable` item in this slot</returns>
         public virtual Draggable RemoveItem() {
             if (Item == null) {
                 return null;
@@ -148,9 +148,11 @@ namespace Collect.Slots {
             return oldItem;
         }
 
-        /**
-         *  <summary>Add the `DragHandler` to this slot.</summary>
-         **/
+        /// <summary>
+        /// Add the `Draggable` to this slot. Will set this 
+        /// transform as the parent.
+        /// </summary>
+        /// <param name="item">The `Draggable` to add to this slot</param>
         public virtual void AddItem(Draggable item) {
             this.Item = item;
             item.transform.SetParent(transform);

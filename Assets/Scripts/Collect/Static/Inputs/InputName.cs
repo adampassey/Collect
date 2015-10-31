@@ -1,7 +1,10 @@
 ﻿
 namespace Collect.Static.Inputs {
 
-
+    /// <summary>
+    /// Exposing static strings instead of reliance
+    /// on strings elsewhere.
+    /// </summary>
     public static class InputName {
 
         public static class Inventory {
