@@ -7,7 +7,7 @@ A drag-and-drop grid-based inventory system for [Unity 4.6+](https://unity3d.com
 * Sound effects
 * Events
 
-![alt tag](http://i.imgur.com/CN5GZf1.png)
+![alt tag](https://github.com/adampassey/collect/raw/master/collect-example.gif)
 
 ## Installation
 Download [collect.unitypackage](https://github.com/adampassey/collect/raw/master/collect.unitypackage) and import it with Unity by going to `Assets > Import Package > Custom Package`. Choose [collect.unitypackage](https://github.com/adampassey/collect/raw/master/collect.unitypackage) and import all assets.
