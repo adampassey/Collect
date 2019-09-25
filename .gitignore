@@ -28,5 +28,6 @@ ExportedObj/
 ._*
 .Spotlight-V100
 .Trashes
+.vs/*
 ehthumbs.db
 Thumbs.db
