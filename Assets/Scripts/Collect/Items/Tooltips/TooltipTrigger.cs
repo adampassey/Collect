@@ -73,5 +73,22 @@ namespace Collect.Items.Tooltips {
             tooltip.Hide();
             tooltip = null;
         }
+
+        /// <summary>
+        /// When this object gets disabled, hide the tooltip.
+        /// Solves the problem of the container getting closed
+        /// while the item is being hovered and the tooltip
+        /// stays on the screen. Checks for tooltip first, because
+        /// the object gets disabled on the frame it's created
+        /// and would otherwise throw an error
+        /// </summary>
+        public void OnDisable() {
+            if (tooltip == null) {
+                return;
+            }
+
+            tooltip.Hide();
+            tooltip = null;
+        }
     }
 }
